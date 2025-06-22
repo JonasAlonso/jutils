@@ -8,7 +8,7 @@ public class JUtilsServerException extends  JUtilsException {
     private final String requestBody;
 
     public JUtilsServerException(HttpStatusCode status, String message, String requestBody, byte[] body, Charset charset) {
-        super(String.format("Client error %s: %s", status.value(), new String(body, charset)));
+        super(String.format("Server error %s: %s", status.value(), new String(body, charset)));
         this.requestBody = requestBody;
     }
 

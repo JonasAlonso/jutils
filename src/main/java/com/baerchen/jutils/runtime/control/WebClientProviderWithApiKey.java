@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class WebClientProviderWithApiKey implements Validable {
+public abstract class WebClientProviderWithApiKey implements Validable<Map<String, String>> {
 
     private final Map<String, String> credentials;
-    private List<String> keys;
+    private final List<String> keys;
 
     public WebClientProviderWithApiKey(Map<String, String> credentials, List<String> keys) {
         this.credentials = credentials;
@@ -18,15 +18,16 @@ public abstract class WebClientProviderWithApiKey implements Validable {
     public ValidationReport<Map<String, String>> validate() {
         String input = this.credentials.entrySet()
                 .stream()
-                .map(k -> String.format("[key,value]=[%s,%s]", k.getKey(), k.getValue()))
+                .map(e -> String.format("[key,value]=[%s,%s]", e.getKey(), e.getValue()))
                 .collect(Collectors.joining(", "));
-        String missingKeys = missingKeys(keys).stream().map( str -> str.toString()).collect(Collectors.joining(", "));
+        List<String> missing = missingKeys(keys);
+        boolean valid = missing.isEmpty();
 
-                 return ValidationReport.<Map<String, String>>builder()
-                        .valid(containsAllKeys(keys))
-                        .data(input)
-                        .cause(String.format("Missing key(s): [%s]", missingKeys))
-                        .build();
+        return ValidationReport.<Map<String, String>>builder()
+                .valid(valid)
+                .data(input)
+                .cause(valid ? null : String.format("Missing key(s): [%s]", String.join(", ", missing)))
+                .build();
     }
     private boolean containsAllKeys(List<String> requiredKeys) {
         return requiredKeys.stream()
