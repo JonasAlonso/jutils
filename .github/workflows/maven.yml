@@ -20,7 +20,7 @@ permissions:
   packages: read
   pages: read
   pull-requests: write
-  security-events: read
+  security-events: write
   statuses: write
 on:
   push:
