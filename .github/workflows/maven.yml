@@ -8,9 +8,20 @@
 
 name: Java CI with Maven
 permissions: 
-  contents: read 
-  id-token: write 
-  security-events: write
+  actions: read
+  attestations: read
+  checks: read
+  contents: read
+  deployments: read
+  id-token: none
+  issues: read
+  models: read
+  discussions: read
+  packages: read
+  pages: read
+  pull-requests: write
+  security-events: read
+  statuses: write
 on:
   push:
     branches: [ "main" ]
